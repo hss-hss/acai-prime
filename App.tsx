@@ -1,13 +1,39 @@
 import { StatusBar } from 'expo-status-bar';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Header from './components/header';
 import { Feather } from '@expo/vector-icons';
+import { useState } from 'react';
+import Button from './components/button';
+import Octicons from '@expo/vector-icons/Octicons';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import CoffeeCard from './components/cards';
+import Card from './components/cards';
+import Footer from './components/footer';
+
+
 
 
 export default function App() {
-  return (
+    const [nome, setNome] = useState("");
+    const [message, setMessage] = useState("");
 
-    <ScrollView style={styles.container}>
+    const handlerOrder = ()=>{
+    if (nome.trim() === ''){
+      setMessage('Por favor, Informe seu nome!')
+    }else{
+      setMessage(`Olá, ${nome}. Pedido iniciado com sucesso`)
+    }
+  };
+
+
+  return (
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior='padding'
+      keyboardVerticalOffset={30}>
+
+
+    <ScrollView   >
       <Header />
       { /*content */}
       <View style={styles.content}>
@@ -60,17 +86,56 @@ export default function App() {
 
 
         {/* Seção Menu */}
-        <View style={styles.menuSection}>
         <Text style = {styles.menuText}>Nossos Copos & Tigelas</Text>
+        <View style={styles.menuSection}>
         
+
+          <Card name='Açaí Tradicional' description='Açaí cremoso com banana e granola tradicional' price='R$ 14,00' source={require("./assets/imagem1.jpg")}></Card>
+          <Card name='Copo Tropical' description='Camadas de açaí, morango, kiwi e leite em pó' price='R$ 18,50' source={require("./assets/imagem3.jpg")}></Card>
+          <Card name='Vitamina de Açaí' description='Bebida energética batida com guaraná e aveia' price='R$ 12,00' source={require("./assets/imagem4.jpg")}></Card>
+          <Card name='Açaí Fit Zero' description='Zero adição de açúcar, com chia e castanhas' price='R$ 16,90' source={require("./assets/imagem5.jpg")}></Card>
 
         </View>
 
         {/* Seção Menu */}
+
+        {/* Seção input */}
+
+        <View style={styles.inputSection}>
+          <Text style={styles.inputQuestion}>
+            Qual o seu nome?
+          </Text>
+
+          <View style = {styles.input}>
+            
+          <Octicons style={styles.inputIcon} name="person" size={16} color="black" />
+          <TextInput
+          placeholder = "Digite seu nome"
+          value = {nome}
+          onChangeText = {setNome}
+          >
+          </TextInput>
+          </View>
+
+          <Button title='Fazer meu pedido' onPress={handlerOrder}></Button>
+          
+          {message !== '' && (
+            <View style={styles.messageSection}>
+              <AntDesign name="check-circle" size={24} color="#2E7D32" />
+              <Text style={styles.messageText}>{message}</Text> 
+              </View>)
+            }
+  
+        </View>
+
+        {/* Seção input */}
+          <Footer></Footer>
       </View>
+
       { /*content */}
 
     </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -172,5 +237,58 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     fontSize: 12,
 
+  },
+  menuSection:{
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    marginBottom: 32
+  },
+  menuText:{
+    fontSize: 22,
+    fontWeight: "800",
+    color: "#2C1B30",
+    marginBottom: 16,
+    marginTop: 24
+  },
+  inputSection:{
+    backgroundColor: "#ffff",
+    borderRadius: 24,
+    padding: 16,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.05,
+    elevation: 4
+
+  },
+  inputQuestion:{
+    fontSize: 16,
+    fontWeight: 800,
+    marginBottom: 10
+  },
+  input:{
+    flexDirection:"row",
+    backgroundColor:"#F1EDF4",
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    height: 48
+    
+  },
+  inputIcon:{
+    marginTop:15,
+    paddingRight:6
+  },
+  messageSection:{
+    paddingLeft: 10,
+    flexDirection:"row", 
+    paddingVertical: 10,
+    backgroundColor: "#E8F5E9",
+    borderRadius: 16,
+    marginTop: 10
+  },  
+  messageText:{
+    paddingLeft: 8,
+    fontWeight:600,
+    color: "#2E7D32"
   }
 });
